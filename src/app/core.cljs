@@ -11,11 +11,11 @@
 
 ; create an HTML element
 (defn counter-component []
-  [:div {:class ["h3"]}
+  [:div {:class ["content"]}
    "Counter No: " @counter
    [:br]
    [:button {:on-click #(swap! counter inc)
-             :class ["btn" "btn-primary"]
+             :class ["button" "is-primary"]
              } "Click Me"]])
 
 ; meta tag :dev/after-load is for hot-code reloading
