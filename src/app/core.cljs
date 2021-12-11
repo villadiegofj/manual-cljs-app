@@ -1,4 +1,6 @@
-(ns app.core)
+(ns app.core
+  (:require [reagent.core :as r]
+            [reagent.dom :as rdom]))
 
 ; application STATE
 (defonce title (atom "HOLA MUNDO!!"))
@@ -8,15 +10,15 @@
   (.getElementById js/document "app"))
 
 ; create an HTML element
-(defn h1 []
-  (doto
-    (.createElement js/document "H1")
-    (aset "innerHTML" @title)))
+(defn simple-component []
+  [:div
+    [:p "Hello Reagent"]])
 
 ; meta tag :dev/after-load is for hot-code reloading
-(defn ^:dev/after-load start []
-  (js/console.log "Hello CLJS 2")
-  (.appendChild (app) (h1)))
+(defn ^:dev/after-load start
+  "Render the toplevel component for this app."
+  []
+  (rdom/render [simple-component] (app)))
 
 ; entry point and called once
 (defn ^:export init []

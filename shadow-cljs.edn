@@ -1,5 +1,5 @@
 {:source-paths ["src"]
- :dependencies []
+ :dependencies [[reagent "1.1.0"]]
 
  :dev-http     {7777 "public"}
  :nrepl        {:port 8777}
