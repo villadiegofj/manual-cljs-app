@@ -1,6 +1,10 @@
 (ns app.core
   (:require [reagent.core :as r]
-            [reagent.dom :as rd]))
+            [reagent.dom :as rd]
+            ["primereact/button" :refer (Button)]))
+
+; import { Button } from 'primereact/button';
+; import { InputText } from 'primereact/inputtext';
 
 ; application STATE
 (defonce counter (r/atom 0))
@@ -16,6 +20,11 @@
       [:div
        (for [article items]
           [:h2 (:title article)])])))
+
+(defn js-react-component []
+  [:div
+   [:p "Native JS React Components"]
+   [:> Button {:onClick #(js/alert "Hello")} "Click Me"]])
 
 (defn header []
   [:nav.navbar.navbar-light
@@ -48,7 +57,9 @@
 (defn app []
   [:div
    [header]
-   [home-page]])
+   [home-page]
+   [:hr]
+   [js-react-component]])
 
 ; meta tag :dev/after-load is for hot-code reloading
 (defn ^:dev/after-load start
