@@ -1,7 +1,8 @@
 (ns app.core
   (:require [reagent.core :as r]
             [reagent.dom :as rd]
-            ["primereact/button" :refer (Button)]))
+            ;["primereact/button" :refer (Button)]
+            ["@chakra-ui/react" :refer (ChakraProvider Flex Button)]))
 
 ; import { Button } from 'primereact/button';
 ; import { InputText } from 'primereact/inputtext';
@@ -22,10 +23,11 @@
           [:h2 (:title article)])])))
 
 (defn js-react-component []
-  [:div
-   [:p "Native JS React Components"]
-   [:> Button {:onClick #(js/alert "Hello")
-               :style {:background-color "red"}} "Click Me"]])
+  [:> Flex {:style {:background-color "hsl(196 73% 90%)"}}
+   [:div {:id "js-react-comp"}
+    [:p "Native JS React Components"]
+    [:> Button {:on-click #(js/alert "Hello")
+                :style {:background-color "hsl(196, 73%, 62%)"}} "Click Me"]]])
 
 (defn header []
   [:nav.navbar.navbar-light
