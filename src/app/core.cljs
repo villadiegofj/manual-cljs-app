@@ -24,7 +24,8 @@
 (defn js-react-component []
   [:div
    [:p "Native JS React Components"]
-   [:> Button {:onClick #(js/alert "Hello")} "Click Me"]])
+   [:> Button {:onClick #(js/alert "Hello")
+               :style {:background-color "red"}} "Click Me"]])
 
 (defn header []
   [:nav.navbar.navbar-light
