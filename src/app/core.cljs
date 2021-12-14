@@ -1,6 +1,7 @@
 (ns app.core
   (:require [reagent.core :as r]
             [reagent.dom :as rd]
+            [ajax.core :refer (GET POST json-response-format)]
             ;["primereact/button" :refer (Button)]
             ["@chakra-ui/react" :refer (ChakraProvider Flex Button)]))
 
@@ -9,6 +10,22 @@
 
 ; application STATE
 (defonce counter (r/atom 0))
+(defonce article-list (r/atom nil))
+(defonce api-url "https://api.realworld.io/api")
+
+
+(defn handler [resp]
+  (reset! article-list resp))
+
+(defn error-handler [{:keys [status status-text]}]
+  (.log js/console status-text))
+
+(defn get-articles []
+ (GET (str api-url "/articles") {:handler handler
+                                 :error-handler error-handler
+                                 :response-format (json-response-format {:keywords? true})}))
+
+
 
 (defonce mock-articles
    [{:title "Backpacking is fun"}])
@@ -46,7 +63,7 @@
     [:ul.nav.nav-pills.outline-active
      [:li.nav-item
       [:a.nav-link.active {:href ""} "Global feed"]]]]
-   [articles mock-articles]])
+   [articles (:articles (deref article-list))]])
 
 (defn home-page []
   [:div.home-page
@@ -72,4 +89,15 @@
 
 ; entry point and called once
 (defn ^:export init []
+  (get-articles)
   (start))
+
+
+(comment
+  (nth [10 20] 0)
+  (get [10 20] 0)
+  (get-articles)
+  (-> (deref article-list)
+      :articles
+      (get 0))
+  )

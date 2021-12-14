@@ -1,5 +1,7 @@
 {:source-paths ["src"]
- :dependencies [[reagent "1.1.0"]]
+ :dependencies [[reagent "1.1.0"]
+                [cljs-ajax "0.8.4"]
+                [cider/cider-nrepl "0.27.3"]]
 
  :dev-http     {7777 "public"}
  :nrepl        {:port 8777}
