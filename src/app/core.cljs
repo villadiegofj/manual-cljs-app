@@ -148,6 +148,34 @@
         {:type "password" :placeholder "Password"}]]
       [:button.btn.btn-lg.btn-primary.pull-xs-right "Sign Up"]]]]])
 
+(defn settings-form []
+  [:form
+   [:fieldset
+    [:fieldset.form-group
+     [:input.form-control {:type "text" :placeholder "URL of profile picture"}]]
+    [:fieldset.form-group
+     [:input.form-control.form-control-lg
+      {:type "text" :placeholder "Username"}]]
+    [:fieldset.form-group
+     [:textarea.form-control.form-control-lg
+      {:type "text" :rows 8 :placeholder "Short bio about you"}]]
+    [:fieldset.form-group
+       [:input.form-control.form-control-lg
+        {:type "email" :placeholder "Email"}]]
+    [:fieldset.form-group
+       [:input.form-control.form-control-lg
+        {:type "password" :placeholder "Password"}]]
+    [:button.btn.btn-lg.btn-primary.pull-xs-right {:type "submit"} "Update Settings"] ]])
+
+(defn settings-page []
+  [:div.settings-page>div.container.page>div.row
+   [:div.col-md-6.offset-md-3.col-xs-12
+    [:h1.text-xs-center "Your settings"]
+    [settings-form]
+    [:hr]
+    [:button.btn.btn-outline-danger "Or click here to logout."]]])
+
+
 (def routes
   [
    ["/" {:name ::home
@@ -155,17 +183,20 @@
    ["/login" {:name ::login
               :view login-page}]
    ["/register" {:name ::register
-                 :view register-page}]])
+                 :view register-page}]
+   ["/settings" {:name ::settings
+                 :view settings-page}]])
 
 (defn router-start! []
   (rfe/start!
    (rf/router routes {:data {:coercion rss/coercion}})
    (fn [matched-route] (reset! routes-state matched-route))
-   {:use-fragment true}))
+   {:use-fragment false})) ;; use true for hashed routes
 
 (defn app []
   [:div
    [header]
+   [:hr]
    (let [current-view (-> @routes-state :data :view)]
      [current-view])
    ;[:hr]
