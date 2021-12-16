@@ -1,6 +1,10 @@
 (ns app.core
   (:require [reagent.core :as r]
             [reagent.dom :as rd]
+            [reitit.frontend :as rf]
+            [reitit.frontend.easy :as rfe]
+            [reitit.coercion.spec :as rss]
+            [spec-tools.data-spec :as ds]
             [ajax.core :refer (GET POST json-response-format)]
             ;["primereact/button" :refer (Button)]
             ["@chakra-ui/react" :refer (ChakraProvider Flex Button)]))
@@ -12,7 +16,7 @@
 (defonce counter (r/atom 0))
 (defonce article-list (r/atom nil))
 (defonce api-url "https://api.realworld.io/api")
-
+(defonce routes-state (r/atom nil))
 
 (defn handler [resp]
   (reset! article-list resp))
@@ -29,6 +33,7 @@
 
 (defonce mock-articles
    [{:title "Backpacking is fun"}])
+
 
 
 (defn article-preview [{:keys [title description author favoritesCount tagList createdAt]}]
@@ -69,9 +74,13 @@
                 :style {:background-color "hsl(196, 73%, 62%)"}} "Click Me"]]])
 
 (defn header []
-  [:nav.navbar.navbar-light
-   [:div.container]
-   [:a.navbar-brand "conduit"]])
+  [:nav.navbar.navbar-light>div.container
+   [:a.navbar-brand {:href (rfe/href ::home)} "conduit"]
+   [:ul.nav.navbar-nav.pull-xs-right
+    [:li.nav-item
+     [:a.nav-link {:href (rfe/href ::home)} "Home"]]
+    [:li.nav-item
+     [:a.nav-link {:href (rfe/href ::login)} "Login"]]]])
 
 (defn banner [token]
   (when token
@@ -96,12 +105,44 @@
      [:div.sidebar
       [:p "Popular tags"]]]]])
 
+(defn auth-signin [evt]
+  (.preventDefault evt)
+  (.log js/console "LOGIN"))
+
+(defn login-page []
+  [:div.auth-page>div.container.page>div.row
+   [:div.col-md-6.offset-md-3.col-xs-12
+    [:h1.text-xs-center "Sign In"]
+    [:p.text-xs-center [:a "Need an account?"]]
+    [:form {:on-submit auth-signin}
+     [:fieldset
+      [:fieldset.form-group
+       [:input.form-control.form-control-lg {:type "input"}]]
+      [:fieldset.form-group
+       [:input.form-control.form-control-lg {:type "password"}]]
+      [:button.btn.btn-lg.btn-primary.pull-xs-right "Sign In"]]]]])
+
+(def routes
+  [
+   ["/" {:name ::home
+         :view home-page}]
+   ["/login" {:name ::login
+              :view login-page}]])
+
+(defn router-start! []
+  (rfe/start!
+   (rf/router routes {:data {:coercion rss/coercion}})
+   (fn [matched-route] (reset! routes-state matched-route))
+   {:use-fragment true}))
+
 (defn app []
   [:div
    [header]
-   [home-page]
-   [:hr]
-   [js-react-component]])
+   (let [current-view (-> @routes-state :data :view)]
+     [current-view])
+   ;[:hr]
+   ;[js-react-component]
+   ])
 
 ; meta tag :dev/after-load is for hot-code reloading
 (defn ^:dev/after-load start
@@ -111,11 +152,14 @@
 
 ; entry point and called once
 (defn ^:export init []
+  (router-start!)
   (get-articles)
   (start))
 
 
 (comment
+  (-> (deref routes-state)
+      (:data :view))
   (nth [10 20] 0)
   (get [10 20] 0)
   (get-articles)
