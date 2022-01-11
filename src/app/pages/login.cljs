@@ -17,8 +17,8 @@
      [:fieldset
       [:fieldset.form-group
        [:input.form-control.form-control-lg
-        {:type "email" :placeholder "john@gmail.com"}]]
+        {:type "email" :placeholder "Username"}]]
       [:fieldset.form-group
        [:input.form-control.form-control-lg
-        {:type "password"}]]
+        {:type "password" :placeholder "Password"}]]
       [:button.btn.btn-lg.btn-primary.pull-xs-right "Sign In"]]]]])

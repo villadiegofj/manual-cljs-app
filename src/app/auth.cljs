@@ -24,15 +24,15 @@
 
 (defn login! [login-input]
   (POST (str api-url "/users/login") {:params {:user login-input}
-                                :format (json-request-format)
-                                :handler auth-success!
-                                :error-handler auth-error!
-                                :response-format (json-response-format {:keywords? true})}))
+                                      :format (json-request-format)
+                                      :handler auth-success!
+                                      :error-handler auth-error!
+                                      :response-format (json-response-format {:keywords? true})}))
 
 
 (comment
-  (register! {:username "villa.04@condor.com"
-              :email "villa.04@condor.com"
+  (register! {:username "villa.06@condor.com"
+              :email "villa.06@condor.com"
               :password "12345"})
 
   (login! {:email "villa.05@condor.com"

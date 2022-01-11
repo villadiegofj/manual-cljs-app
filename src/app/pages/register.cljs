@@ -1,22 +1,13 @@
 (ns app.pages.register
   (:require [app.auth :as auth :refer (error-state)]
+            [app.components.error-list :refer (error-list)]
             [reitit.frontend.easy :as rfe]
-            [reagent.core :as r]
-            [clojure.string :as str]))
+            [reagent.core :as r]))
 
 (defn register! [evt input]
   (.preventDefault evt)
   (auth/register! input))
 
-(defn list-errors [errors]
-  (when (seq errors)
-    [:ul.error-messages
-     (for [[key value] errors]
-       [:li
-        (-> key
-            name
-            str/capitalize
-            (str " - " (str/join ", " value)))])]))
 
 (defn register-page []
   (let [initial-state {:username ""
@@ -28,7 +19,7 @@
        [:div.col-md-6.offset-md-3.col-xs-12
         [:h1.text-xs-center "Sign Up"]
         [:p.text-xs-center [:a {:href (rfe/href :login)} "Have an account?"]]
-        [list-errors @error-state]
+        [error-list @error-state]
         [:form {:on-submit #(register! % @state)}
          [:fieldset
           [:fieldset.form-group
