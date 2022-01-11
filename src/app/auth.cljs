@@ -1,7 +1,8 @@
 (ns app.auth
   (:require [reagent.core :as r]
+            [reitit.frontend.easy :as rfe]
             [app.api :refer (api-url)]
-            [ajax.core :refer (POST json-request-format json-response-format)]))
+            [ajax.core :refer (POST GET json-request-format json-response-format)]))
 
 (defonce auth-state (r/atom nil))
 (defonce error-state (r/atom nil))
@@ -9,26 +10,47 @@
 (defn auth-success! [{{:keys [token] :as user} :user}]
   (.setItem js/localStorage "auth-token" token)
   (reset! auth-state user)
-  (reset! error-state nil))
+  (reset! error-state nil)
+  (rfe/push-state :home))
 
 (defn auth-error! [{{:keys [errors]} :response} ]
   (reset! error-state errors))
 
 
 (defn register! [register-input]
-  (POST (str api-url "/users") {:params {:user register-input}
-                                :format (json-request-format)
-                                :handler auth-success!
-                                :error-handler auth-error!
-                                :response-format (json-response-format {:keywords? true})}))
+  (POST (str api-url "/users")
+    {:params {:user register-input}
+     :format (json-request-format)
+     :handler auth-success!
+     :error-handler auth-error!
+     :response-format (json-response-format {:keywords? true})}))
 
 (defn login! [login-input]
-  (POST (str api-url "/users/login") {:params {:user login-input}
-                                      :format (json-request-format)
-                                      :handler auth-success!
-                                      :error-handler auth-error!
-                                      :response-format (json-response-format {:keywords? true})}))
+  (POST (str api-url "/users/login")
+    {:params {:user login-input}
+     :format (json-request-format)
+     :handler auth-success!
+     :error-handler auth-error!
+     :response-format (json-response-format {:keywords? true})}))
 
+
+(defn get-auth-header []
+  (let [token (.getItem js/localStorage "auth-token")]
+    [:Authorization (str "Token " token)]))
+
+(defn get-me-success! [{user :user}]
+  (reset! auth-state user))
+
+(defn get-me-error! [error]
+  (js/console.log error)
+  (rfe/push-state :login))
+
+(defn me []
+  (GET (str api-url "/user")
+    {:handler get-me-success!
+     :error-handler get-me-error! 
+     :response-format (json-response-format {:keywords? true})
+     :headers (get-auth-header)}))
 
 (comment
   (register! {:username "villa.06@condor.com"

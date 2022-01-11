@@ -4,7 +4,7 @@
             [reitit.frontend.easy :as rfe]
             [reitit.frontend.controllers :as rfc]
             [reitit.coercion.spec :as rss]
-            [app.auth :refer (error-state)]
+            [app.auth :as auth :refer (error-state)]
             [app.pages.home :refer (home-page)]
             [app.pages.login :refer (login-page)]
             [app.pages.register :refer (register-page)]
@@ -19,7 +19,9 @@
          :controllers [{:start #(js/console.log "Enter home-page...")
                         :stop #(js/console.log "Exit home-page...")}]}]
    ["/login" {:name :login
-              :view login-page}]
+              :view login-page
+              :controllers [{:stop (fn []
+                                     (reset! error-state nil))}]}]
    ["/register" {:name :register
                  :view register-page
                  :controllers [{:stop (fn []
@@ -30,7 +32,9 @@
 
 (def main-router 
   (rf/router routes {:data {:coercion rss/coercion
-                            :controllers [{:start #(js/console.log "Enter root...")
+                            :controllers [{:start (fn [] 
+                                                    (js/console.log "Enter root...")
+                                                    (auth/me))
                                            :stop #(js/console.log "Exit root...")}]}}))
 
 (def on-navigate 
@@ -47,3 +51,8 @@
 (defn router-start! []
   (rfe/start! main-router on-navigate
    {:use-fragment false})) ;; use true for hashed routes
+
+
+(comment
+  (rfe/push-state :home)
+  )
