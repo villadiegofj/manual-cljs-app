@@ -1,6 +1,9 @@
 node_modules
 .shadow-cljs
+.clj-kondo
+.lsp
 public/js/cljs-runtime
 public/js/manifest.edn
 package-lock.json
 .idea
+.calva
