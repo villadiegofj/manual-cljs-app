@@ -1,0 +1,11 @@
+match: #reitit.core.Match{:template /user/@:username, 
+                          :data {:coercion #object[reitit.coercion.spec.t_reitit$coercion$spec31578], 
+                                 :controllers [{:start #object[Function], :stop #object[Function]} {:params #object[Function], :start #object[Function]}], 
+                                 :name :profile, 
+                                 :view #'app.pages.profile/profile-page, 
+                                 :parameters {:path {:username #object[cljs$core$string_QMARK_]}}}, 
+                          :result {:path #object[Function]}, 
+                          :path-params {:username villa06}, 
+                          :path /user/@villa06, 
+                          :query-params {}, 
+                          :parameters {:path {:username villa06}}}

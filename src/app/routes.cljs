@@ -8,7 +8,8 @@
             [app.pages.home :refer (home-page)]
             [app.pages.login :refer (login-page)]
             [app.pages.register :refer (register-page)]
-            [app.pages.settings :refer (settings-page)]))
+            [app.pages.settings :refer (settings-page)]
+            [app.pages.profile :refer (profile-page)]))
 
 (defonce routes-state (r/atom nil))
 
@@ -27,7 +28,16 @@
                  :controllers [{:stop (fn []
                                         (reset! error-state nil))}]}]
    ["/settings" {:name :settings
-                 :view settings-page}]])
+                 :view settings-page}]
+   
+   ["/user/@:username" {:name :profile
+                        :view #'profile-page
+                        :parameters {:path {:username string?}}
+                        :controllers [{:params (fn [match]
+                                                 (println "match:" match)
+                                                 (:path (:parameters match)))
+                                       :start (fn [{:keys [username] :as props}]
+                                                (println "props:" username " -props:" props))}]}]])
 
 
 (def main-router 
@@ -54,5 +64,5 @@
 
 
 (comment
-  (rfe/push-state :home)
-  )
+  (rfe/push-state :home))
+  

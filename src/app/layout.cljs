@@ -9,7 +9,7 @@
    [header @auth-state]
    [:hr]
    (let [current-view (-> @routes-state :data :view)]
-     [current-view])
+     [current-view @routes-state])
    ;[:hr]
    ;[js-react-component]
    ])
