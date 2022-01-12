@@ -3,6 +3,9 @@
             [goog.string :as gstr]))
 
 
+;; reitit docs 
+;; (href key params query)
+
 (defn un-auth-header []
   [:nav.navbar.navbar-light>div.container
    [:a.navbar-brand {:href (rfe/href :home)} "conduit"]
@@ -30,7 +33,7 @@
      [:i.ion-gear-a]
       (gstr/unescapeEntities "&nbsp;") "Settings"]]
     [:li.nav-item
-     [:a.nav-link {:href (rfe/href :settings)}
+     [:a.nav-link {:href (rfe/href :profile {:username username})}
       [:img.user-pic {:src image}]
       username]]]])
 

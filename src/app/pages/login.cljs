@@ -25,7 +25,7 @@
          [:fieldset.form-group
           [:input.form-control.form-control-lg
            {:type "email" 
-            :placeholder "Username"
+            :placeholder "Email"
             :value (:email @state)
             :on-change #(swap! state assoc :email (.. % -target -value))}]]
          [:fieldset.form-group

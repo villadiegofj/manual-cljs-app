@@ -5,6 +5,7 @@
             [reitit.frontend.controllers :as rfc]
             [reitit.coercion.spec :as rss]
             [app.auth :as auth :refer (error-state)]
+            [app.profile :as profile]
             [app.pages.home :refer (home-page)]
             [app.pages.login :refer (login-page)]
             [app.pages.register :refer (register-page)]
@@ -37,7 +38,8 @@
                                                  (println "match:" match)
                                                  (:path (:parameters match)))
                                        :start (fn [{:keys [username] :as props}]
-                                                (println "props:" username " -props:" props))}]}]])
+                                                (println "props:" username " -props:" props)
+                                                (profile/fetch-profile! username))}]}]])
 
 
 (def main-router 

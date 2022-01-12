@@ -78,6 +78,7 @@
   (save-user! {:image "https://avatars.githubusercontent.com/u/1940195?s=40&v=4"})
 
   (:user (deref auth-state))
+  (deref auth-state)
   (deref error-state)
   (.setItem js/localStorage "auth-token" "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpbGxhLjAyQGNvbmRvci5jb20iLCJ1c2VybmFtZSI6InZpbGxhLjAyQGNvbmRvci5jb20iLCJiaW8iOm51bGwsImltYWdlIjoiaHR0cHM6Ly9hcGkucmVhbHdvcmxkLmlvL2ltYWdlcy9zbWlsZXktY3lydXMuanBlZyIsImlhdCI6MTYzOTk2MTg3OSwiZXhwIjoxNjQ1MTQ1ODc5fQ.nHisPAUt7y3-hNH7LI5hEEFknPqez5SI3937iLFpLSw")
   (.getItem js/localStorage "auth-token")
