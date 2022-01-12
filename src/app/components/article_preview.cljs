@@ -22,8 +22,8 @@
        ^{:key tag}
        [:li.tag-default.tag-pill.tag-outline])]]])
 
-(defn articles [items]
-  (if-not (seq items)
+(defn articles [items loading?]
+  (if loading?
     [:div.article-preview "Loading..."]
     (if (= 0 (count items))
       [:div.article-preview "No articles are here."]

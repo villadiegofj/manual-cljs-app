@@ -2,6 +2,7 @@
   (:require [reagent.core :as r]
             [clojure.string :as str]
             [app.auth :refer (get-auth-header)]
+            [app.articles :refer (articles-state)]
             [app.api :refer (api-url)]
             [ajax.core :refer (GET POST DELETE json-response-format)]))
 
@@ -16,8 +17,7 @@
   (reset! error-state error))
 
 
-(defn fetch-profile! [username]
-  (reset! profile-state nil)
+(defn fetch-profile! [username]  
   (GET (str api-url "/profiles/" username)
     {:handler fetch-success!
      :error-handler fetch-error!
