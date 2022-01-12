@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [reitit.frontend.easy :as rfe]
             [app.api :refer (api-url)]
-            [ajax.core :refer (POST GET json-request-format json-response-format)]))
+            [ajax.core :refer (POST GET PUT json-request-format json-response-format)]))
 
 (defonce auth-state (r/atom nil))
 (defonce error-state (r/atom nil))
@@ -33,12 +33,17 @@
      :error-handler auth-error!
      :response-format (json-response-format {:keywords? true})}))
 
+(defn logout! []
+  (.removeItem js/localStorage "auth-token")
+  (reset! auth-state nil)
+  (rfe/push-state :login))
 
 (defn get-auth-header []
   (let [token (.getItem js/localStorage "auth-token")]
     [:Authorization (str "Token " token)]))
 
 (defn get-me-success! [{user :user}]
+  (println user)
   (reset! auth-state user))
 
 (defn get-me-error! [error]
@@ -52,6 +57,15 @@
      :response-format (json-response-format {:keywords? true})
      :headers (get-auth-header)}))
 
+(defn save-user! [user]
+  (PUT (str api-url "/user")
+    {:params {:user user}
+     :format (json-request-format)
+     :handler get-me-success!
+     :error-handler get-me-error!
+     :headers (get-auth-header)
+     :response-format (json-response-format {:keywords? true})}))
+
 (comment
   (register! {:username "villa.06@condor.com"
               :email "villa.06@condor.com"
@@ -59,6 +73,9 @@
 
   (login! {:email "villa.05@condor.com"
            :password "12345"})
+  
+
+  (save-user! {:image "https://avatars.githubusercontent.com/u/1940195?s=40&v=4"})
 
   (:user (deref auth-state))
   (deref error-state)
