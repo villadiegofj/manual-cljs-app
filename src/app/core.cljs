@@ -15,5 +15,4 @@
 ; entry point and called once
 (defn ^:export main []
   (router-start!)
-  (get-articles)
   (render))

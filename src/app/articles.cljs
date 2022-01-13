@@ -33,6 +33,23 @@
      :response-format (json-response-format {:keywords? true})}))
 
 
+(defn limit [rows page]
+  (str "limit=" rows "&offset=" (or (* page rows) 0)))
+
+(defn fetch-by-author [author page]
+  (reset! loading-state true)
+  (GET (str api-url "/articles?author=" (js/encodeURIComponent author) "&" (limit 5 page) )
+    {:handler handler
+     :error-handler error-handler
+     :response-format (json-response-format {:keywords? true})}))
+
+(defn fetch-by-favorited [author page]
+  (reset! loading-state true)
+  (GET (str api-url "/articles?favorited=" (js/encodeURIComponent author) "&" (limit 5 page))
+    {:handler handler
+     :error-handler error-handler
+     :response-format (json-response-format {:keywords? true})}))
+
 (comment
   (-> (deref routes-state)
       (:data :view))
@@ -41,6 +58,8 @@
   (get-articles)
   (articles-feed)
   (deref articles-state)
+  (fetch-by-author "Gerome" 0)
+  (fetch-by-favorited "condorapp1" 0)
   (-> (deref articles-state)
       :articles
       (get 0))

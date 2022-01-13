@@ -12,7 +12,7 @@
             [app.pages.login :refer (login-page)]
             [app.pages.register :refer (register-page)]
             [app.pages.settings :refer (settings-page)]
-            [app.pages.profile :refer (profile-page)]))
+            [app.pages.profile :refer (profile-page handle-by-author)]))
 
 (defonce routes-state (r/atom nil))
 
@@ -41,7 +41,8 @@
                                                  (:path (:parameters match)))
                                        :start (fn [{:keys [username] :as props}]
                                                 (println "props:" username " -props:" props)
-                                                (profile/fetch-profile! username))
+                                                (profile/fetch-profile! username)
+                                                (handle-by-author username))
                                        :stop #(reset! profile-state nil)}]}]])
 
 
